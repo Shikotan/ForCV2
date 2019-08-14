@@ -1,0 +1,42 @@
+CREATE TABLE PRODUCTS (
+    product int IDENTITY(1,1) PRIMARY KEY,
+    name varchar(255) NOT NULL
+);
+
+CREATE TABLE CATEGORIES (
+    category int IDENTITY(1,1) PRIMARY KEY,
+    name varchar(255) NOT NULL
+);
+
+CREATE TABLE PRODUCT_CATEGORIES (
+    product_categories int IDENTITY(1,1) PRIMARY KEY,
+    product int NOT NULL FOREIGN KEY REFERENCES PRODUCTS(product),
+    category int NOT NULL FOREIGN KEY REFERENCES CATEGORIES(category)
+);
+
+INSERT INTO PRODUCTS (name)
+SELECT 'SOAP' UNION ALL
+SELECT 'SHOWER GEL' UNION ALL
+SELECT 'BREAD' UNION ALL
+SELECT 'FORK'
+
+INSERT INTO CATEGORIES (name)
+SELECT 'BATH' UNION ALL
+SELECT 'FOOD' UNION ALL
+SELECT 'KITCHEN'
+
+INSERT INTO PRODUCT_CATEGORIES (product, category)
+SELECT 1,1 UNION ALL
+SELECT 2,1 UNION ALL
+SELECT 3,2 UNION ALL
+SELECT 1,3
+
+SELECT
+    p.name as [Продукт],
+    c.name as [Категория]
+FROM PRODUCTS p (nolock)
+left join PRODUCT_CATEGORIES pc (nolock)
+    on p.product = pc.product
+left join CATEGORIES c (nolock)
+    on c.category = pc.category
+ORDER BY p.name
